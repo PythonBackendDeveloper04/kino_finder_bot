@@ -6,7 +6,7 @@ from keyboards.default.buttons import *
 
 @dp.message(Command('admin'),IsBotAdmin(),IsPrivate())
 async def admin(message:types.Message):
-    await message.answer("🔝 Admin panel...",reply_markup=admin_buttons())
+    await message.answer("👨‍💻 Admin panel!",reply_markup=admin_buttons())
 
 @dp.message(F.text=='🗣 Reklama yuborish',IsBotAdmin(),IsPrivate())
 async def get_add_type(message:types.Message):
@@ -22,4 +22,4 @@ async def get_member_count(message:types.Message):
 
 @dp.message(F.text=="🔙 Orqaga")
 async def admin(message:types.Message):
-    await message.answer("🔝 Admin panel...",reply_markup=admin_buttons())
+    await message.answer("👨‍💻 Admin panel!",reply_markup=admin_buttons())

@@ -11,21 +11,12 @@ from keyboards.default.buttons import admin_buttons
 @dp.message(F.text=='📹 Video',IsBotAdmin(),IsPrivate())
 async def get_format_text(message:types.Message,state:FSMContext):
     await message.answer(html.bold("Post videosini yuboring!"),reply_markup=back_button())
-    await message.answer("Post sozlamalari",reply_markup=format_btn(format='TEXT'))
     await state.set_state(VideoAdvertising.video)
 
 @dp.message(F.text=='◀️ Orqaga',VideoAdvertising.video,IsBotAdmin())
 async def back(message:types.Message,state:FSMContext):
-    await message.answer("🔝 Admin panel...", reply_markup=admin_buttons())
+    await message.answer("👨‍💻 Admin panel!", reply_markup=admin_buttons())
     await state.clear()
-
-@dp.callback_query(TextFormatCallBack.filter())
-async def change_format_text(call:types.CallbackQuery,callback_data:TextFormatCallBack,state:FSMContext):
-    format = callback_data.format
-    await state.update_data({
-        'format':format
-    })
-    await call.message.edit_reply_markup(reply_markup=format_btn(format='text' if format=='html' else 'html'))
 
 @dp.message(VideoAdvertising.video,IsBotAdmin())
 async def get_text(message:types.Message,state:FSMContext):
@@ -46,17 +37,16 @@ async def get_text(message:types.Message,state:FSMContext):
         await state.set_state(VideoAdvertising.url)
     else:
         await message.answer(html.bold("Post videosini yuboring!"))
-        await message.answer("Post sozlamalari", reply_markup=format_btn(format='TEXT'))
         await state.set_state(VideoAdvertising.video)
 
 @dp.message(F.text=='⏺ Bekor qilish',VideoAdvertising.url,IsBotAdmin())
 async def back(message:types.Message,state:FSMContext):
-    await message.answer("🔝 Admin panel...", reply_markup=admin_buttons())
+    await message.answer("👨‍💻 Admin panel!", reply_markup=admin_buttons())
     await state.clear()
 
 @dp.message(F.text=='⏺ Bekor qilish',VideoAdvertising.check,IsBotAdmin())
 async def back(message:types.Message,state:FSMContext):
-    await message.answer("🔝 Admin panel...", reply_markup=admin_buttons())
+    await message.answer("👨‍💻 Admin panel!", reply_markup=admin_buttons())
     await state.clear()
 
 @dp.message(F.text=='🆗 Kerakmas',VideoAdvertising.url,IsBotAdmin())

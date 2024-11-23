@@ -11,21 +11,12 @@ from keyboards.default.buttons import admin_buttons
 @dp.message(F.text=='📸 Rasm',IsBotAdmin(),IsPrivate())
 async def get_format_text(message:types.Message,state:FSMContext):
     await message.answer(html.bold("Post rasmini yuboring!"),reply_markup=back_button())
-    await message.answer("Post sozlamalari",reply_markup=format_btn(format='TEXT'))
     await state.set_state(ImageAdvertising.image)
 
 @dp.message(F.text=='◀️ Orqaga',ImageAdvertising.image,IsBotAdmin(),IsPrivate())
 async def navigate_back(message:types.Message,state:FSMContext):
-    await message.answer("🔝 Admin panel...", reply_markup=admin_buttons())
+    await message.answer("👨‍💻 Admin panel!", reply_markup=admin_buttons())
     await state.clear()
-
-@dp.callback_query(TextFormatCallBack.filter())
-async def change_text_format(call:types.CallbackQuery,callback_data:TextFormatCallBack,state:FSMContext):
-    format = callback_data.format
-    await state.update_data({
-        'format':format
-    })
-    await call.message.edit_reply_markup(reply_markup=format_btn(format='text' if format=='html' else 'html'))
 
 @dp.message(ImageAdvertising.image,IsBotAdmin())
 async def get_text(message:types.Message,state:FSMContext):
@@ -46,17 +37,16 @@ async def get_text(message:types.Message,state:FSMContext):
         await state.set_state(ImageAdvertising.url)
     else:
         await message.answer(html.bold("Post rasmini yuboring!"))
-        await message.answer("Post sozlamalari", reply_markup=format_btn(format='TEXT'))
         await state.set_state(ImageAdvertising.image)
 
 @dp.message(F.text=='⏺ Bekor qilish',ImageAdvertising.url,IsBotAdmin())
 async def cancel(message:types.Message,state:FSMContext):
-    await message.answer("🔝 Admin panel...", reply_markup=admin_buttons())
+    await message.answer("👨‍💻 Admin panel!", reply_markup=admin_buttons())
     await state.clear()
 
 @dp.message(F.text=='⏺ Bekor qilish',ImageAdvertising.check,IsBotAdmin())
 async def cancel(message:types.Message,state:FSMContext):
-    await message.answer("🔝 Admin panel...", reply_markup=admin_buttons())
+    await message.answer("👨‍💻 Admin panel!", reply_markup=admin_buttons())
     await state.clear()
 
 @dp.message(F.text=='🆗 Kerakmas',ImageAdvertising.url,IsBotAdmin())

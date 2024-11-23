@@ -4,9 +4,9 @@ def admin_buttons():
     btn.button(text="🎞 Kino qo'shish")
     btn.button(text="🗣 Reklama yuborish")
     btn.button(text="📊 Obunachilar soni")
-    btn.button(text="🗣 Kanal qo'shish")
+    btn.button(text="📢 Kanal qo'shish")
     btn.button(text="❌ Kanal o'chirish")
-    btn.button(text="🗣 Kanallar")
+    btn.button(text="📢 Kanallar")
     btn.adjust(2)
     return btn.as_markup(resize_keyboard=True,input_placeholder="Kerakli bo'limni tanlang...",
                          one_time_keyboard=True)

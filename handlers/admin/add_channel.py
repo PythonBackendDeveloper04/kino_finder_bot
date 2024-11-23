@@ -7,24 +7,18 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder, InlineKeyboardButton
 from keyboards.default.buttons import back_button, admin_buttons
 from aiogram.filters.callback_data import CallbackData
 
-
-# CheckAddChannel faqat `channel_id`ni ishlatadi
 class CheckAddChannel(CallbackData, prefix="ikb4"):
     channel_id: str
 
-
-# 🗣 Kanal qo'shish uchun xabar yuborilganda
-@dp.message(F.text == "🗣 Kanal qo'shish", IsBotAdmin(), IsPrivate())
+@dp.message(F.text == "📢 Kanal qo'shish", IsBotAdmin(), IsPrivate())
 async def add_channel(message: types.Message, state: FSMContext):
     await message.answer("Kanal ID sini yuboring!", reply_markup=back_button())
     await state.set_state(AddChannelState.channnel_id)
 
-
-# Kanal ID yuborilganda
 @dp.message(F.text, IsBotAdmin(), IsPrivate(), AddChannelState.channnel_id)
 async def add_channel_state(message: types.Message, state: FSMContext):
     if message.text == "◀️ Orqaga":
-        await message.answer("🔝 Admin panel!", reply_markup=admin_buttons())
+        await message.answer("👨‍💻 Admin panel!", reply_markup=admin_buttons())
         await state.clear()
     else:
         try:
@@ -51,7 +45,7 @@ async def add_channel_state(message: types.Message, state: FSMContext):
                 btn = InlineKeyboardBuilder()
                 btn.add(InlineKeyboardButton(text=title, url=link))
                 btn.button(
-                    text="Kanalni qo'shish va tasdiqlash",
+                    text="✅ Tasdiqlash",
                     callback_data=CheckAddChannel(channel_id=message.text),
                 )
                 btn.adjust(1, 1)
@@ -71,7 +65,7 @@ async def add_channel_state(message: types.Message, state: FSMContext):
 # Kanalni tasdiqlash va qo'shish
 @dp.callback_query(CheckAddChannel.filter(), IsBotAdmin(), AddChannelState.check)
 async def get(call: types.CallbackQuery, callback_data: CheckAddChannel, state: FSMContext):
-    await call.answer("Kanal qo'shildi", show_alert=True)
+    await call.answer("Kanal qo'shildi!", show_alert=True)
 
     # Holatdan ma'lumotlarni olish
     data = await state.get_data()
@@ -87,6 +81,6 @@ async def get(call: types.CallbackQuery, callback_data: CheckAddChannel, state: 
     )
 
     # Admin paneliga qaytish
-    await call.message.answer("🔝 Admin panel!", reply_markup=admin_buttons())
+    await call.message.answer("👨‍💻 Admin panel!", reply_markup=admin_buttons())
     await call.message.delete()
     await state.clear()

@@ -30,5 +30,5 @@ async def get(call:types.CallbackQuery,callback_data:CheckDeleteChannel,state:FS
     except Exception as e:
         print(e)
     await call.answer("Kanal o'chirildi!",show_alert=True)
-    await call.message.answer("🔝 Admin panel!", reply_markup=admin_buttons())
+    await call.message.answer("👨‍💻 Admin panel!", reply_markup=admin_buttons())
     await call.message.delete()

@@ -11,21 +11,12 @@ from keyboards.default.buttons import admin_buttons
 @dp.message(F.text=='✏️ Matn',IsBotAdmin(),IsPrivate())
 async def request_post_text(message:types.Message,state:FSMContext):
     await message.answer("Post tekstini yuboring!",reply_markup=back_button())
-    await message.answer("Post sozlamalari",reply_markup=format_btn(format='TEXT'))
     await state.set_state(TextAdvertising.text)
 
 @dp.message(F.text=='◀️ Orqaga',TextAdvertising.text,IsBotAdmin(),IsPrivate())
 async def navigate_back(message:types.Message,state:FSMContext):
-    await message.answer("🔝 Admin panel...", reply_markup=admin_buttons())
+    await message.answer("👨‍💻 Admin panel!", reply_markup=admin_buttons())
     await state.clear()
-
-@dp.callback_query(TextFormatCallBack.filter())
-async def change_text_format(call:types.CallbackQuery,callback_data:TextFormatCallBack,state:FSMContext):
-    format = callback_data.format
-    await state.update_data({
-        'format':format
-    })
-    await call.message.edit_reply_markup(reply_markup=format_btn(format='text' if format=='text' else 'html'))
 
 @dp.message(TextAdvertising.text,IsBotAdmin())
 async def receive_post_text(message:types.Message,state:FSMContext):
@@ -45,17 +36,17 @@ async def receive_post_text(message:types.Message,state:FSMContext):
         await state.set_state(TextAdvertising.url)
     else:
         await message.answer(html.bold("Post tekstini yuboring!"))
-        await message.answer("Post sozlamalari", reply_markup=format_btn(format='TEXT'))
+        await message.answer("Post sozlamalari")
         await state.set_state(TextAdvertising.text)
 
 @dp.message(F.text=='⏺ Bekor qilish',TextAdvertising.url,IsBotAdmin(),IsPrivate())
 async def cancel(message:types.Message,state:FSMContext):
-    await message.answer("🔝 Admin panel...", reply_markup=admin_buttons())
+    await message.answer("👨‍💻 Admin panel!", reply_markup=admin_buttons())
     await state.clear()
 
 @dp.message(F.text=='⏺ Bekor qilish',TextAdvertising.check,IsBotAdmin())
 async def cancel(message:types.Message,state:FSMContext):
-    await message.answer("🔝 Admin panel...", reply_markup=admin_buttons())
+    await message.answer("👨‍💻 Admin panel!", reply_markup=admin_buttons())
     await state.clear()
 
 @dp.message(F.text=='🆗 Kerakmas',TextAdvertising.url,IsBotAdmin())

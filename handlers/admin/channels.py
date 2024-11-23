@@ -7,7 +7,7 @@ from filters import *
 class ChannelInfo(CallbackData,prefix='ikb8'):
     channel_id:str
 
-@dp.message(F.text=="🗣 Kanallar",IsBotAdmin(),IsPrivate())
+@dp.message(F.text=="📢 Kanallar",IsBotAdmin(),IsPrivate())
 async def channels(message:types.Message):
     channels = await db.select_all_channels()
     btn = InlineKeyboardBuilder()
@@ -19,7 +19,7 @@ async def channels(message:types.Message):
             btn.adjust(1)
         except Exception as e:
             print(e)
-    await message.answer("Kanallar",reply_markup=btn.as_markup())
+    await message.answer("<b>Kanallar ro'yhati:</b>",reply_markup=btn.as_markup())
 
 @dp.callback_query(ChannelInfo.filter(), IsBotAdmin())
 async def channel_info(call:types.CallbackQuery,callback_data=ChannelInfo):

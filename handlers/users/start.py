@@ -38,8 +38,8 @@ async def start(message:types.Message):
     btn.button(text="Obunani tekshirish", callback_data=CheckSubs(check=True)) # Obuna holatini tekshirish tugmasi.
     btn.adjust(1)
     if final_status: # Agar barcha kanallarga obuna bo'lsa:
-        await message.answer(f'Assalomu aleykum {message.from_user.first_name}')
-        await message.answer("Kino kodini yuboring")
+        await message.answer(f'Assalomu aleykum <b>{message.from_user.first_name}</b>')
+        await message.answer("Kino kodini yuboring:")
 
     else:
         await message.answer(text=
@@ -58,8 +58,10 @@ async def test(call:types.CallbackQuery):
             res = await bot.get_chat_member(chat_id=channel[2], user_id=user_id) # Foydalanuvchining obuna holatini tekshirish.
             if res.status in ['member', 'administrator', 'creator']: #agar obunasi bo'lsa:
                 buttons.append(InlineKeyboardButton(text=f"✅ {chat.title}", url=await chat.export_invite_link()))
+                print(3)
             else:
                 buttons.append(InlineKeyboardButton(text=f"❌ {chat.title}", url=await chat.export_invite_link()))
+                print(4)
                 all_subscribed = False
         except Exception as e:
             print(e)
@@ -80,41 +82,6 @@ async def test(call:types.CallbackQuery):
         await call.message.delete()
     except Exception as e:
         print(e)
-
-@dp.message(Command('info'))
-async def get_info(message:types.Message):
-    data = await db.select_user(telegram_id=message.from_user.id)
-
-    language = data[3]
-
-    if language=='uz':
-        await message.answer(f"Sizning ma'lumotlaringiz!\n"
-                             f"Fullname: {message.from_user.full_name}\n"
-                             f"Telegram ID: {message.from_user.id}\n"
-                             f"Username: @{message.from_user.username}\n")
-    else:
-        await message.answer(f"Your info!\n"
-                             f"Fullname: {message.from_user.full_name}\n"
-                             f"Telegram ID: {message.from_user.id}\n"
-                             f"Username: @{message.from_user.username}\n")
-
-@dp.message(Command('set_language'))
-async def set_language(message:types.Message):
-    data = await db.select_user(telegram_id=message.from_user.id)
-    language = data[3]
-
-    await message.answer("Kerakli tilni tanlang"  if language=='uz' else "Choose language", reply_markup=button.as_markup())
-
-@dp.callback_query(ChooseLanguageCallback.filter())
-async def change_language(call:types.CallbackQuery,callback_data:ChooseLanguageCallback):
-    language = callback_data.language
-    try:
-        await db.update_user_language(language=language,telegram_id=call.from_user.id)
-    except Exception as e:
-        print(e)
-
-    await call.answer(text="Til yangilandi" if language=='uz' else "Language updated",show_alert=True)
-    await call.message.delete()
 
 @dp.message()
 async def get_movie(message:types.Message):

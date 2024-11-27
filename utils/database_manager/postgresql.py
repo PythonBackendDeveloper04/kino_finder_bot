@@ -50,6 +50,7 @@ class Database:
         id SERIAL PRIMARY KEY,
         channel_name VARCHAR(255) NULL,
         channel_id BIGINT NOT NULL UNIQUE,
+        invite_link TEXT,
         channel_members_count INT NOT NULL
         );
         """
@@ -76,15 +77,22 @@ class Database:
         sql = "INSERT INTO Users (fullname, telegram_id,language) VALUES($1, $2, $3) returning *"
         return await self.execute(sql, fullname, telegram_id,language,fetchrow=True)
 
-    async def add_channel(self, channel_name, channel_id,channel_members_count):
-        sql = "INSERT INTO Channels (channel_name, channel_id,channel_members_count) VALUES($1, $2, $3) returning *"
-        return await self.execute(sql, channel_name,int(channel_id),int(channel_members_count),fetchrow=True)
+    async def add_channel(self, channel_name, channel_id,invite_link,channel_members_count):
+        sql = "INSERT INTO Channels (channel_name, channel_id,invite_link,channel_members_count) VALUES($1, $2, $3, $4) returning *"
+        return await self.execute(sql, channel_name,int(channel_id),invite_link,int(channel_members_count),fetchrow=True)
 
     async def delete_channel(self,channel_id):
         sql = """
         DELETE FROM Channels WHERE channel_id = $1
         """
         return await self.execute(sql,int(channel_id),fetchrow=True)
+
+    async def invite_link(self, channel_id):
+        sql = """
+        SELECT invite_link FROM Channels WHERE channel_id=$1
+        """
+        result = await self.execute(sql, int(channel_id), fetchrow=True)
+        return result['invite_link'] if result else None  # 'invite_link' maydonini to'g'ridan-to'g'ri qaytarish
 
     async def select_all_users(self):
         sql = "SELECT * FROM Users"

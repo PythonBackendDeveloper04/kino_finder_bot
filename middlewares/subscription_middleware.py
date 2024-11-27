@@ -38,19 +38,16 @@ class UserCheckMiddleware(BaseMiddleware):
         for CHANNEL in channels:
             status = await check(user_id=user_id, channel=CHANNEL[2])
             final_status *= status  # Final statusni yangilash
-            print(status)
 
             channel = await bot.get_chat(CHANNEL[2])
-            try:
-                # Kanal uchun tugma qo‘shish
-                if status:
-                    builder.button(text=f"✅ {channel.title}", url=f"{channel.invite_link}")
-                    print("Kanalga obuna bo‘lgan")
-                else:
-                    builder.button(text=f"❌ {channel.title}", url=f"{channel.invite_link}")
-                    print("Kanalga obuna emas")
-            except Exception as e:
-                print(f"Kanalni olishda xatolik: {e}")
+            invite_link = await db.invite_link(channel.id)
+            print(invite_link)
+            if status:
+                builder.button(text=f"✅ {channel.title}", url=invite_link)
+                print("Kanalga obuna bo‘lgan")
+            else:
+                builder.button(text=f"❌ {channel.title}", url=invite_link)
+                print("Kanalga obuna emas")
 
         # Obuna tekshirish xabari
         text = "Obunani tekshirish"

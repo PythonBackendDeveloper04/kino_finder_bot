@@ -30,8 +30,9 @@ async def start(message:types.Message):
         final_status *= status
         try:
             channel = await bot.get_chat(channel[2]) # Kanal ma'lumotlarini olish.
+            invite_link = await db.invite_link(channel.id)  # Taklif havolasini olish
+            print(f"invite_link:{invite_link}")
             if not status: # Agar foydalanuvchi kanalga obuna bo'lmasa:
-                invite_link = await channel.export_invite_link() # Taklif havolasini olish
                 btn.row(InlineKeyboardButton(text=f"❌ {channel.title}", url=invite_link))
         except Exception as e:
             print(e)
@@ -55,13 +56,13 @@ async def test(call:types.CallbackQuery):
     for channel in channels:
         try:
             chat = await bot.get_chat(channel[2]) # kanal msa'lumotlarini olish
+            invite_link = await db.invite_link(chat.id)
             res = await bot.get_chat_member(chat_id=channel[2], user_id=user_id) # Foydalanuvchining obuna holatini tekshirish.
             if res.status in ['member', 'administrator', 'creator']: #agar obunasi bo'lsa:
-                buttons.append(InlineKeyboardButton(text=f"✅ {chat.title}", url=await chat.export_invite_link()))
-                print(3)
+                buttons.append(InlineKeyboardButton(text=f"✅ {chat.title}", url=invite_link))
+                print(f"invite_link:{invite_link}")
             else:
-                buttons.append(InlineKeyboardButton(text=f"❌ {chat.title}", url=await chat.export_invite_link()))
-                print(4)
+                buttons.append(InlineKeyboardButton(text=f"❌ {chat.title}", url=invite_link))
                 all_subscribed = False
         except Exception as e:
             print(e)
@@ -77,6 +78,9 @@ async def test(call:types.CallbackQuery):
             text="Iltimos bot to'liq ishlashi uchun quyidagi kanallarga obuna bo'ling!",
             reply_markup=builder.as_markup()
         )
+    else:
+        await bot.send_message(chat_id=user_id,
+                               text="<i>Kino kodini kiriting:</i>")
 
     try:
         await call.message.delete()

@@ -56,6 +56,16 @@ class Database:
         """
         await self.execute(sql, execute=True)
 
+    async def instagram_profiles_table(self):
+        sql = """
+        CREATE TABLE IF NOT EXISTS InstagramProfiles (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        link TEXT NOT NULL
+        );
+        """
+        await self.execute(sql, execute=True)
+
     async def movies_table(self):
         sql = """
         CREATE TABLE IF NOT EXISTS movies (
@@ -105,6 +115,14 @@ class Database:
     async def select_user(self,telegram_id):
         sql = "SELECT * FROM Users WHERE telegram_id=$1"
         return await self.execute(sql, telegram_id, fetchrow=True)
+
+    async def add_instagram_profile(self, name, link):
+        sql = "INSERT INTO InstagramProfiles (name, link) VALUES ($1, $2) returning *"
+        return await self.execute(sql, name, link, fetchrow=True)
+
+    async def select_all_instagram_profiles(self):
+        sql = "SELECT * FROM InstagramProfiles"
+        return await self.execute(sql, fetch=True)
 
     async def count_users(self):
         sql = "SELECT COUNT(*) FROM Users"

@@ -18,6 +18,11 @@ class AddChannelState(StatesGroup):
     invite_link = State()
     check = State()
 
+class AddInstagramProfile(StatesGroup):
+    name = State()
+    link = State()
+    check = State()
+
 class AddMovie(StatesGroup):
     post_id = State()
     code = State()

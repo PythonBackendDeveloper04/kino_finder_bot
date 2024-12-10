@@ -18,6 +18,7 @@ async def main():
             await db.connection()
             await db.users_table()
             await db.channels_table()
+            await db.instagram_profiles_table()
             await db.movies_table()
         except Exception as e:
             print(e)

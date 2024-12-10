@@ -36,3 +36,11 @@ def send_button():
     btn.button(text="📤 Yuborish")
     btn.adjust(2)
     return btn.as_markup(resize_keyboard=True)
+
+def add_channel_or_insProfile():
+    btn = ReplyKeyboardBuilder()
+    btn.button(text="Telegram")
+    btn.button(text="Instagram")
+    btn.button(text="◀️ Orqaga")
+    btn.adjust(2)
+    return btn.as_markup(resize_keyboard=True)

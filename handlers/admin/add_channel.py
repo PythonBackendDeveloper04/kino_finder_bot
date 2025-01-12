@@ -27,6 +27,7 @@ async def add_channel_state(message: types.Message, state: FSMContext):
         try:
             # Kanal ma'lumotlarini olish
             channel = await bot.get_chat(chat_id=message.text)
+
             if channel.type == "channel":
                 title = channel.title
 
@@ -41,7 +42,7 @@ async def add_channel_state(message: types.Message, state: FSMContext):
                 await state.update_data(
                     channel_id=message.text,
                     channel_name=title,
-                    channel_subscribers=subscribers,
+                    channel_subscribers=subscribers
                 )
 
                 await message.answer("Kanal taklif havolasini yuboring!", reply_markup=back_button())

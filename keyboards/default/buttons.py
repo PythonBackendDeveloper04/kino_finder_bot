@@ -15,7 +15,7 @@ def add_type():
     btn.button(text="✏️ Matn")
     btn.button(text="📸 Rasm")
     btn.button(text="📹 Video")
-    btn.button(text="🔙 Orqaga")
+    btn.button(text="◀️ Orqaga")
     btn.adjust(2)
     return btn.as_markup(resize_keyboard=True)
 
